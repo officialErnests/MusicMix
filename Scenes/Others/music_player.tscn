@@ -1,0 +1,27 @@
+[gd_scene load_steps=4 format=3 uid="uid://dotn2j0fx8e71"]
+
+[ext_resource type="Script" uid="uid://o2dxepyq37hg" path="res://Scripts/music_player.gd" id="1_3s1nr"]
+[ext_resource type="PackedScene" uid="uid://buthrw0hs6t7i" path="res://assets/Assets/Player.fbx" id="1_i514n"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_i514n"]
+radius = 2.0
+
+[node name="MusicPlayer" type="Node3D"]
+script = ExtResource("1_3s1nr")
+
+[node name="Player" parent="." instance=ExtResource("1_i514n")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+
+[node name="Label3D" type="Label3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+billboard = 2
+text = "Song:
+Curently playing:"
+
+[node name="Area3D" type="Area3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+shape = SubResource("SphereShape3D_i514n")
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]

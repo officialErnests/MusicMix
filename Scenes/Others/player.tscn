@@ -1,6 +1,6 @@
 [gd_scene load_steps=24 format=4 uid="uid://dopkxgd5lmhdg"]
 
-[ext_resource type="Script" uid="uid://wv33nmomhq6o" path="res://Scenes/Others/player.gd" id="1_qjkso"]
+[ext_resource type="Script" uid="uid://wv33nmomhq6o" path="res://Scripts/player.gd" id="1_qjkso"]
 [ext_resource type="AnimationNodeBlendSpace2D" uid="uid://dd6856teqlmyf" path="res://assets/Anim/new_animation_node_blend_space_2d.tres" id="2_f6uxt"]
 
 [sub_resource type="CapsuleShape3D" id="CapsuleShape3D_u1mpj"]
@@ -1949,8 +1949,7 @@ bind/8/name = &"hand.R"
 bind/8/bone = -1
 bind/8/pose = Transform3D(-0.011751, -0.498897, 0.866582, 0.0997994, -0.862899, -0.495424, 0.994938, 0.0806626, 0.0599293, -0.0039023, -0.0101281, 0.00101318)
 
-[node name="Player" type="CharacterBody3D"]
-wall_min_slide_angle = 0.0174533
+[node name="Player" type="CharacterBody3D" groups=["Player"]]
 script = ExtResource("1_qjkso")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -1992,6 +1991,7 @@ libraries = {
 [node name="OmniLight3D" type="OmniLight3D" parent="."]
 transform = Transform3D(1, 8.47033e-22, -2.88506e-22, -8.47033e-22, 1, 1.23314e-43, 2.88506e-22, 1.21913e-43, 1, 0, 1, 0)
 light_color = Color(0, 1, 1, 1)
+light_energy = 0.1
 
 [node name="Guy" type="Skeleton3D" parent="."]
 transform = Transform3D(-100, 1.50996e-05, 6.60024e-13, 0, -4.37114e-06, 100, 1.50996e-05, 100, 4.37114e-06, 0, 0, 0)
@@ -2083,3 +2083,16 @@ bones/11/scale = Vector3(1, 1, 1)
 [node name="Cube" type="MeshInstance3D" parent="Guy"]
 mesh = SubResource("ArrayMesh_nqeku")
 skin = SubResource("Skin_077cp")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="Label" type="Label" parent="CanvasLayer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/line_spacing = -7
+text = "
+"

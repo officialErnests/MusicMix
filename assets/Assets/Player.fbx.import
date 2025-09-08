@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://bdh2vyuuowxf2"
-path="res://.godot/imported/city.fbx-b4a38bd8f2d3a3466d049d459025476a.scn"
+uid="uid://buthrw0hs6t7i"
+path="res://.godot/imported/Player.fbx-049389bd90b8228cc694647922f3b2f0.scn"
 
 [deps]
 
-source_file="res://assets/Assets/city.fbx"
-dest_files=["res://.godot/imported/city.fbx-b4a38bd8f2d3a3466d049d459025476a.scn"]
+source_file="res://assets/Assets/Player.fbx"
+dest_files=["res://.godot/imported/Player.fbx-049389bd90b8228cc694647922f3b2f0.scn"]
 
 [params]
 
@@ -34,7 +34,7 @@ animation/import_rest_as_RESET=false
 import_script/path=""
 _subresources={
 "materials": {
-"Material.003": {
+"Material.002": {
 "use_external/enabled": true,
 "use_external/path": "uid://cpii8bc2j6d22"
 }

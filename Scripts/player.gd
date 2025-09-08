@@ -2,7 +2,7 @@ extends CharacterBody3D
 
 
 const SPEED = 5.0
-const JUMP_VELOCITY = 4.5
+const JUMP_VELOCITY = 10
 const COOL_BONE = 3
 
 var mouse_prev_pos 
@@ -17,15 +17,16 @@ var mouse_prev_pos
 
 
 var intendedDir = 0
-var prev_speed = 0
 
 func _ready() -> void:
 	mouse_prev_pos = get_viewport().get_mouse_position()
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 
-var sensativity = 10
+var sensativity = 5
 
 func _process(delta: float) -> void:
+	if position.y < -100:
+		position = Vector3.ZERO
 	light.global_position = charecter.to_global(charecter.get_bone_global_pose(COOL_BONE).origin)
 	light.omni_range = velocity.length() + 5
 	charecter.rotation.y += (fmod(intendedDir - charecter.rotation.y - PI, PI*2) - PI) * delta * 2
@@ -33,8 +34,15 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("escape"):
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			$CanvasLayer.visible = true
+			var textResult = ""
+			textResult += "5EEnoWAY\n"
+			for musicText in Music.checklist_5EEnoWAY.keys():
+				textResult += "| [-] - ???\n" if !Music.checklist_5EEnoWAY[musicText] else "| [X] - " + musicText + "\n"
+			$CanvasLayer/Label.text = textResult
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+			$CanvasLayer.visible = false
 
 func _input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion and Input.get_mouse_mode() == Input.MOUSE_MODE_CAPTURED:
@@ -55,12 +63,11 @@ func _physics_process(delta: float) -> void:
 	if not is_on_floor():
 		velocity += get_gravity() * delta
 	if is_on_wall():
-		velocity *= Vector3(prev_speed / (velocity.length() + 1), 1, prev_speed / (velocity.length() + 1))
 		if Input.is_action_just_pressed("jump"):
-			velocity *= 2
-			velocity.x *= 1.1
-			velocity.z *= 1.1
-			velocity += get_wall_normal() * 10
+			velocity.y = JUMP_VELOCITY
+			velocity.x += 1 if velocity.x > 0 else -1
+			velocity.z += 1 if velocity.z > 0 else -1
+			velocity += get_wall_normal() * 1
 	else:
 		if Input.is_action_just_pressed("jump") and is_on_floor():
 			velocity.y = JUMP_VELOCITY
@@ -73,7 +80,7 @@ func _physics_process(delta: float) -> void:
 	alignWheel(velocity)
 	anim_tree["parameters/Blend2/blend_amount"] = clamp(velocity.length()/10, 0, 1)
 	anim_tree["parameters/AnimationNodeBlendSpace2D/blend_position"] = Vector2(input_dir.x, -input_dir.y)
-	camera.fov = 60 + velocity.length()
+	camera.fov = clamp(50 + velocity.length() * 2, 60, 120)
 	if direction:
 		alignCharecter(direction)
 		velocity.x += SPEED * direction.x * delta * 2
@@ -81,9 +88,8 @@ func _physics_process(delta: float) -> void:
 		velocity.x *= 0.99
 		velocity.z *= 0.99
 	else:
-		velocity.x *= 0.9
-		velocity.z *= 0.9
-	prev_speed = velocity.length()
+		velocity.x *= 0.95
+		velocity.z *= 0.95
 	move_and_slide()
 
 func alignWheel(vel : Vector3):
