@@ -8,3 +8,6 @@ var checklist_5EEnoWAY = {
 	"Ti5or" = false,
 	"Death Of Cookie5" = false,
 }
+var checklist_ST4YLost = {
+	
+}

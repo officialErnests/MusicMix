@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cgpwy2pbrabix"]
+
+[resource]
+metallic = 1.0
+metallic_specular = 0.0
+roughness = 0.1
+rim_tint = 0.0
+grow_amount = 0.203

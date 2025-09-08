@@ -25,6 +25,14 @@ func _ready() -> void:
 var sensativity = 5
 
 func _process(delta: float) -> void:
+	if raycast.is_colliding():
+		var lenght = raycast.global_transform.origin.distance_to(raycast.get_collision_point())
+		camera.position.z = max(lenght - 2,2)
+	else:
+		if round(velocity.length()) == 0:
+			camera.position.z += (20 - camera.position.z) * delta
+		else:
+			camera.position.z = 5
 	if position.y < -100:
 		position = Vector3.ZERO
 	light.global_position = charecter.to_global(charecter.get_bone_global_pose(COOL_BONE).origin)
@@ -51,11 +59,7 @@ func _input(event: InputEvent) -> void:
 		var camera_rot = neck.rotation_degrees
 		neck.rotation_degrees = camera_rot
 		neck.rotation.x = clamp(neck.rotation.x, -1,1)
-		if raycast.is_colliding():
-			var lenght = raycast.global_transform.origin.distance_to(raycast.get_collision_point())
-			camera.position.z = lenght
-		else:
-			camera.position.z = 3
+		
 
 func _physics_process(delta: float) -> void:
 

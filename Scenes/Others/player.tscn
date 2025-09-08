@@ -1970,7 +1970,7 @@ transform = Transform3D(1, -2.11758e-22, 7.10543e-15, 0, 1, 0, -8.88178e-16, 0, 
 transform = Transform3D(1, 2.11758e-22, -7.10543e-15, 0, 1, 0, 8.88178e-16, 1.88079e-37, 1, -2.13163e-14, 0, 3)
 
 [node name="RayCast3D" type="RayCast3D" parent="anotherNeck/neck"]
-target_position = Vector3(0, 0, 3)
+target_position = Vector3(0, 0, 7)
 collision_mask = 2
 
 [node name="AnimationTree" type="AnimationTree" parent="."]

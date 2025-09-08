@@ -45,7 +45,7 @@ func _process(delta: float) -> void:
 		curentMusic.play()
 		return
 	if Music.nextMusic != "" && Music.nextMusic != curentMusic.name:
-		if Music.checklist_5EEnoWAY.find_key(Music.nextMusic): Music.checklist_5EEnoWAY[Music.nextMusic] = true
+		if Music.checklist_5EEnoWAY.has(Music.nextMusic): Music.checklist_5EEnoWAY[Music.nextMusic] = true
 		nextMusic = get_node(Music.nextMusic)
 		Music.curentMusic = Music.nextMusic
 		Music.nextMusic = ""
