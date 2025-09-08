@@ -3,6 +3,7 @@ extends CharacterBody3D
 
 const SPEED = 5.0
 const JUMP_VELOCITY = 4.5
+const COOL_BONE = 3
 
 var mouse_prev_pos 
 @onready var camera = $anotherNeck/neck/Camera3D
@@ -12,8 +13,11 @@ var mouse_prev_pos
 @onready var wheel = $Wheel
 @onready var charecter = $Guy
 @onready var anim_tree = $AnimationTree
+@onready var light = $OmniLight3D
+
 
 var intendedDir = 0
+var prev_speed = 0
 
 func _ready() -> void:
 	mouse_prev_pos = get_viewport().get_mouse_position()
@@ -22,7 +26,9 @@ func _ready() -> void:
 var sensativity = 10
 
 func _process(delta: float) -> void:
-	charecter.rotation.y += (fmod(intendedDir - charecter.rotation.y - PI, PI*2) - PI) * delta 
+	light.global_position = charecter.to_global(charecter.get_bone_global_pose(COOL_BONE).origin)
+	light.omni_range = velocity.length() + 5
+	charecter.rotation.y += (fmod(intendedDir - charecter.rotation.y - PI, PI*2) - PI) * delta * 2
 	# charecter.rotation.y += intendedDir - charecter.rotation.y
 	if Input.is_action_just_pressed("escape"):
 		if Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -48,10 +54,16 @@ func _physics_process(delta: float) -> void:
 	# Add the gravity.
 	if not is_on_floor():
 		velocity += get_gravity() * delta
-
-	# Handle jump.
-	if Input.is_action_just_pressed("jump") and is_on_floor():
-		velocity.y = JUMP_VELOCITY
+	if is_on_wall():
+		velocity *= Vector3(prev_speed / (velocity.length() + 1), 1, prev_speed / (velocity.length() + 1))
+		if Input.is_action_just_pressed("jump"):
+			velocity *= 2
+			velocity.x *= 1.1
+			velocity.z *= 1.1
+			velocity += get_wall_normal() * 10
+	else:
+		if Input.is_action_just_pressed("jump") and is_on_floor():
+			velocity.y = JUMP_VELOCITY
 
 	# Get the input direction and handle the movement/deceleration.
 	# As good practice, you should replace UI actions with custom gameplay actions.
@@ -60,18 +72,18 @@ func _physics_process(delta: float) -> void:
 
 	alignWheel(velocity)
 	anim_tree["parameters/Blend2/blend_amount"] = clamp(velocity.length()/10, 0, 1)
-	var temp_dir = Vector2(velocity.x, velocity.z).dot(Vector2(direction.x, direction.z))
-	print( Vector2(1-abs(temp_dir), temp_dir))
-	anim_tree["parameters/AnimationNodeBlendSpace2D/blend_position"] = Vector2(1-abs(temp_dir), temp_dir)
+	anim_tree["parameters/AnimationNodeBlendSpace2D/blend_position"] = Vector2(input_dir.x, -input_dir.y)
+	camera.fov = 60 + velocity.length()
 	if direction:
 		alignCharecter(direction)
-		velocity.x += SPEED * direction.x * delta * 10
-		velocity.z += SPEED * direction.z * delta * 10
-		velocity.x *= 0.95
-		velocity.z *= 0.95
+		velocity.x += SPEED * direction.x * delta * 2
+		velocity.z += SPEED * direction.z * delta * 2
+		velocity.x *= 0.99
+		velocity.z *= 0.99
 	else:
 		velocity.x *= 0.9
 		velocity.z *= 0.9
+	prev_speed = velocity.length()
 	move_and_slide()
 
 func alignWheel(vel : Vector3):
